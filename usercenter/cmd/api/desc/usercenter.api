@@ -1,0 +1,27 @@
+syntax = "v1"
+
+info(
+	title: "im用户api"
+	author: "rosy"
+	email: "xxx@qq.com"
+	version: "v1.0"
+)
+
+type RegisterReq {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+type RegisterResp {
+	Token string `json:"token"`
+}
+
+@server(
+	group : imuser
+	middleware: JwqAuth
+	prefix : /v1
+)
+service usercenter {
+	@doc "获取用户信息"
+	@handler register
+	post /white/account/register (RegisterReq) returns (RegisterResp)
+}

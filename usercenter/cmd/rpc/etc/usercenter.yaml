@@ -1,0 +1,16 @@
+Name: usercenter.rpc
+ListenOn: 0.0.0.0:8080
+Mode: dev
+Mysql:
+  DataSource: root:PXDN93VRKUm8TeE7@tcp(127.0.0.1:33069)/zeroim?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+Etcd:
+  Hosts:
+    - 0.0.0.0:2379
+  Key: usercenter.rpc
+CacheRedis:
+  - Host: 0.0.0.0:36379
+    Pass: G62m50oigInC30sf
+    Type: node
+JwtAuth:
+  AccessSecret: "whatDoYouMean"
+  AccessExpire: 7200

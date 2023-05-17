@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+option go_package = "./pb";
+
+package usercenter;
+
+message BaseResp {
+  enum Errno {
+    OK = 0;
+    ERROR = 1;
+  }
+  Errno errCode = 1;
+  string errMsg = 2;
+}
+message User {
+  string Id = 1;
+  string Username = 2;
+  string Password = 3;
+  string Nickname = 4;
+  string Sign = 5;
+  string Avatar = 6;
+  string Province = 7;
+  string City = 8;
+  string District = 9;
+  string Birthday = 10;
+  string RegisterTime = 11;
+  bool IsMale = 12;
+}
+message GeTUserByUsernameReq{
+  string username = 1;
+}
+message GeTUserResp{
+  User user = 1;
+}
+message InsertUserReq{
+  User user = 1;
+}
+message InsertUserResp{
+  BaseResp baseResp = 1;
+}
+message LoginByIdReq{
+  string userId = 1;
+}
+message LoginByIdResp{
+  User user = 1;
+  string token = 2;
+  BaseResp baseResp = 3;
+}
+
+
+// GeTUserByUsername LoginById（）和GetUserById（）
+service usercenterService {
+  rpc GeTUserByUsername(GeTUserByUsernameReq) returns (GeTUserResp) {}
+  rpc InsertUser(InsertUserReq) returns (InsertUserResp) {}
+  rpc LoginById(LoginByIdReq) returns (LoginByIdResp) {}
+}
+
+
