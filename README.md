@@ -12,7 +12,8 @@ goctl api new usercenter
 # 启动api/rpc服务
 go run usercenter.go -f etc/usercenter-api.yaml
 
-# 使用api文件生成代码（在desc目录下）goctl api go -api usercenter.api -dir ../  -style=goZero
+# 使用api文件生成代码（在desc目录下）
+goctl api go -api usercenter.api -dir ../  -style=goZero
 
 # 使用proto文件生成代码（在pb目录下）
 goctl rpc protoc usercenter.proto --go_out=../ --go-grpc_out=../  --zrpc_out=../
