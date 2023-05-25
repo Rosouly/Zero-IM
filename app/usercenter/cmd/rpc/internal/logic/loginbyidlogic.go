@@ -3,11 +3,9 @@ package logic
 import (
 	"context"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/zeromicro/go-zero/core/logx"
 	"goChat/app/usercenter/cmd/rpc/internal/svc"
 	"goChat/app/usercenter/cmd/rpc/pb"
-	"time"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type LoginByIdLogic struct {
@@ -25,18 +23,20 @@ func NewLoginByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginBy
 }
 
 func (l *LoginByIdLogic) LoginById(in *pb.LoginByIdReq) (*pb.LoginByIdResp, error) {
-	token, err := l.getJwtToken(l.svcCtx.Config.JWTAuth.AccessSecret, time.Now().Unix(), l.svcCtx.Config.JWTAuth.AccessExpire, in.UserId)
-	if err != nil {
-		return nil, err
-	}
-	return &pb.LoginByIdResp{
-		User:  nil,
-		Token: token,
-		BaseResp: &pb.BaseResp{
-			ErrCode: 0,
-			ErrMsg:  "",
-		},
-	}, nil
+	// todo
+	//token, err := l.getJwtToken(l.svcCtx.Config.JWTAuth.AccessSecret, time.Now().Unix(), l.svcCtx.Config.JWTAuth.AccessExpire, in.UserId)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//return &pb.LoginByIdResp{
+	//	User:  nil,
+	//	Token: token,
+	//	BaseResp: &pb.BaseResp{
+	//		ErrCode: 0,
+	//		ErrMsg:  "",
+	//	},
+	//}, nil
+	return nil, nil
 }
 
 func (l *LoginByIdLogic) getJwtToken(secretKey string, iat, seconds int64, userId string) (string, error) {

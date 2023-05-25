@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option go_package = "./pb";
+
+package imuser;
+
+message VerifyTokenReq {
+  string token = 1;
+  string sendID = 2;
+}
+
+message VerifyTokenResp {
+  string uid = 1;
+  bool success = 2;
+  string errMsg = 3;
+}
+
+service imUserService {
+  rpc VerifyToken(VerifyTokenReq) returns (VerifyTokenResp);
+}

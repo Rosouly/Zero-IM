@@ -16,17 +16,17 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var usercenterConfigFile = flag.String("f", "etc/usercenter.yaml", "the rpcconfig file")
+var configFile = flag.String("f", "etc/imuser.yaml", "the config file")
 
 func main() {
 	flag.Parse()
 
 	var c config.Config
-	conf.MustLoad(*usercenterConfigFile, &c)
+	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		pb.RegisterUsercenterServiceServer(grpcServer, server.NewUsercenterServiceServer(ctx))
+		pb.RegisterImUserServiceServer(grpcServer, server.NewImUserServiceServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)
@@ -34,6 +34,6 @@ func main() {
 	})
 	defer s.Stop()
 
-	fmt.Printf("Starting rpc rpcserver at %s...\n", c.ListenOn)
+	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()
 }
