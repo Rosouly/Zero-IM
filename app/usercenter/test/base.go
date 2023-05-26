@@ -20,13 +20,13 @@ var (
 	imUserService  = imuserservice.NewImUserService(zrpc.MustNewClient(imuserConf))
 	usercenterConf = zrpc.RpcClientConf{
 		Endpoints: []string{
-			"0.0.0.0:8080",
+			"0.0.0.0:8888",
 		},
 		Target:   "",
 		App:      "",
 		Token:    "",
 		NonBlock: true,
-		Timeout:  0,
+		Timeout:  5,
 	}
 	usercenterService = usercenterservice.NewUsercenterService(zrpc.MustNewClient(usercenterConf))
 )

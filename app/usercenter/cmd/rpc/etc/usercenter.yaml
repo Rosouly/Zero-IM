@@ -1,5 +1,5 @@
 Name: usercenter.rpc
-ListenOn: 0.0.0.0:8080
+ListenOn: 0.0.0.0:8888
 #Mode: dev
 #Mysql:
 #  DataSource: root:PXDN93VRKUm8TeE7@tcp(127.0.0.1:33069)/zeroim?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
@@ -30,3 +30,8 @@ MysqlConfig:
 TokenRateLimiter:
   Seconds: 100
   Quota: 100
+
+MsgGatewayRpc:
+  Hosts:
+    - 0.0.0.0:2379
+  Key: msggateway.rpc
