@@ -57,3 +57,19 @@ msg-transfer模块
 msg-push模块
 - [ ] 消息推送
 
+## 环境搭建
+```shell
+docker-compose -f docker-compose-env.yml up -d
+```
+
+mysql要执行下面这段才能连接
+```shell
+$ docker exec -it mysql mysql -uroot -p
+##输入密码：PXDN93VRKUm8TeE7
+$ use mysql;
+$ update user set host='%' where user='root';
+$ FLUSH PRIVILEGES;
+```
+
+prometheus
+1. 到容器内复制Prometheus.yml文件内容到deploy/prometheus/server/prometheus.yml
