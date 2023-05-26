@@ -13,7 +13,7 @@ func TestLoginByIDLogic(t *testing.T) {
 		},
 	)
 	if err != nil {
-		t.Error(err)
+		t.Error("err", err)
 	}
 	t.Log(resp)
 }

@@ -26,7 +26,7 @@ var (
 		App:      "",
 		Token:    "",
 		NonBlock: true,
-		Timeout:  0,
+		Timeout:  5,
 	}
 	usercenterService = usercenterservice.NewUsercenterService(zrpc.MustNewClient(usercenterConf))
 )

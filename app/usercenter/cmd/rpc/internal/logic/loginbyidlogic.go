@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"fmt"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/zeromicro/go-zero/core/logx"
 	onlinemessagerelayservice "goChat/app/msg-gateway/cmd/wsrpc/onlineMessageRelayService"
@@ -38,6 +39,7 @@ func (l *LoginByIdLogic) LoginById(in *pb.LoginByIdReq) (*pb.LoginByIdResp, erro
 		return nil, err
 	}
 	tokenMap, err := l.rep.GetTokenMap(l.ctx, claim.UID, claim.Platform)
+	fmt.Println("tokenMap", tokenMap)
 	if err != nil {
 		return nil, err
 	}
@@ -50,6 +52,7 @@ func (l *LoginByIdLogic) LoginById(in *pb.LoginByIdReq) (*pb.LoginByIdResp, erro
 		// 断开用户之前的链接
 		services, err := l.getAllMsgGatewayService()
 		if err != nil {
+			fmt.Println("err Msggateway err")
 			return nil, err
 		}
 		for _, service := range services {
