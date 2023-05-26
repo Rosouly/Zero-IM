@@ -13,7 +13,7 @@ func GetClient(
 	db global.DB,
 ) redis.UniversalClient {
 	// 打印配置
-	log.Printf("redis config: %+v", cfg)
+	log.Printf("redis rpcconfig: %+v", cfg)
 	opts := &redis.UniversalOptions{
 		Addrs: []string{cfg.Host},
 		DB:    db.Int(),

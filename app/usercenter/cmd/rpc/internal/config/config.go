@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/zeromicro/go-zero/core/discov"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/zrpc"
 	"goChat/common/xorm/global"
@@ -19,8 +20,9 @@ type Config struct {
 	TokenRateLimiter RateLimitConfig
 	RedisConfig      RedisConfig
 	MysqlConfig      global.MysqlConfig
-	TokenRenewalDay  int64  `json:",default=30"` // 用户每次连接websocket 自动续签的的天数 默认30天
-	TokenSecret      string `json:",default=zeroimserver"`
+	TokenRenewalDay  int64           `json:",default=30"` // 用户每次连接websocket 自动续签的的天数 默认30天
+	TokenSecret      string          `json:",default=zeroimserver"`
+	MsgGatewayRpc    discov.EtcdConf `json:",optional"`
 }
 
 type RedisConfig struct {

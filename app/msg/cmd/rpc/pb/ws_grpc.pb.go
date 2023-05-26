@@ -31,7 +31,7 @@ func NewExampleClient(cc grpc.ClientConnInterface) ExampleClient {
 	return &exampleClient{cc}
 }
 
-// ExampleServer is the server API for Example service.
+// ExampleServer is the rpcserver API for Example service.
 // All implementations must embed UnimplementedExampleServer
 // for forward compatibility
 type ExampleServer interface {

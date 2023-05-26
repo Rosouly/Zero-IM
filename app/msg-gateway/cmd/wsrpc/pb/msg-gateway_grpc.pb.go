@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	OnlineMessageRelayService_OnlinePushMsg_FullMethodName        = "/msg_gateway.OnlineMessageRelayService/OnlinePushMsg"
 	OnlineMessageRelayService_GetUsersOnlineStatus_FullMethodName = "/msg_gateway.OnlineMessageRelayService/GetUsersOnlineStatus"
+	OnlineMessageRelayService_KickUserConns_FullMethodName        = "/msg_gateway.OnlineMessageRelayService/KickUserConns"
 )
 
 // OnlineMessageRelayServiceClient is the client API for OnlineMessageRelayService service.
@@ -29,6 +30,7 @@ const (
 type OnlineMessageRelayServiceClient interface {
 	OnlinePushMsg(ctx context.Context, in *OnlinePushMsgReq, opts ...grpc.CallOption) (*OnlinePushMsgResp, error)
 	GetUsersOnlineStatus(ctx context.Context, in *GetUsersOnlineStatusReq, opts ...grpc.CallOption) (*GetUsersOnlineStatusResp, error)
+	KickUserConns(ctx context.Context, in *KickUserConnsReq, opts ...grpc.CallOption) (*KickUserConnsResp, error)
 }
 
 type onlineMessageRelayServiceClient struct {
@@ -57,12 +59,22 @@ func (c *onlineMessageRelayServiceClient) GetUsersOnlineStatus(ctx context.Conte
 	return out, nil
 }
 
+func (c *onlineMessageRelayServiceClient) KickUserConns(ctx context.Context, in *KickUserConnsReq, opts ...grpc.CallOption) (*KickUserConnsResp, error) {
+	out := new(KickUserConnsResp)
+	err := c.cc.Invoke(ctx, OnlineMessageRelayService_KickUserConns_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OnlineMessageRelayServiceServer is the rpcserver API for OnlineMessageRelayService service.
 // All implementations must embed UnimplementedOnlineMessageRelayServiceServer
 // for forward compatibility
 type OnlineMessageRelayServiceServer interface {
 	OnlinePushMsg(context.Context, *OnlinePushMsgReq) (*OnlinePushMsgResp, error)
 	GetUsersOnlineStatus(context.Context, *GetUsersOnlineStatusReq) (*GetUsersOnlineStatusResp, error)
+	KickUserConns(context.Context, *KickUserConnsReq) (*KickUserConnsResp, error)
 	mustEmbedUnimplementedOnlineMessageRelayServiceServer()
 }
 
@@ -75,6 +87,9 @@ func (UnimplementedOnlineMessageRelayServiceServer) OnlinePushMsg(context.Contex
 }
 func (UnimplementedOnlineMessageRelayServiceServer) GetUsersOnlineStatus(context.Context, *GetUsersOnlineStatusReq) (*GetUsersOnlineStatusResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUsersOnlineStatus not implemented")
+}
+func (UnimplementedOnlineMessageRelayServiceServer) KickUserConns(context.Context, *KickUserConnsReq) (*KickUserConnsResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method KickUserConns not implemented")
 }
 func (UnimplementedOnlineMessageRelayServiceServer) mustEmbedUnimplementedOnlineMessageRelayServiceServer() {
 }
@@ -126,6 +141,24 @@ func _OnlineMessageRelayService_GetUsersOnlineStatus_Handler(srv interface{}, ct
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OnlineMessageRelayService_KickUserConns_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(KickUserConnsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OnlineMessageRelayServiceServer).KickUserConns(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OnlineMessageRelayService_KickUserConns_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OnlineMessageRelayServiceServer).KickUserConns(ctx, req.(*KickUserConnsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OnlineMessageRelayService_ServiceDesc is the grpc.ServiceDesc for OnlineMessageRelayService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -140,6 +173,10 @@ var OnlineMessageRelayService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUsersOnlineStatus",
 			Handler:    _OnlineMessageRelayService_GetUsersOnlineStatus_Handler,
+		},
+		{
+			MethodName: "KickUserConns",
+			Handler:    _OnlineMessageRelayService_KickUserConns_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

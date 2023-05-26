@@ -46,7 +46,7 @@ func (c *imUserServiceClient) VerifyToken(ctx context.Context, in *VerifyTokenRe
 	return out, nil
 }
 
-// ImUserServiceServer is the server API for ImUserService service.
+// ImUserServiceServer is the rpcserver API for ImUserService service.
 // All implementations must embed UnimplementedImUserServiceServer
 // for forward compatibility
 type ImUserServiceServer interface {

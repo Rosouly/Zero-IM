@@ -2,7 +2,7 @@
 2. 在msg-gateway/cmd/wsrpc/pb中创建文件ws.proto文件（从msg中复制过来）
 3. 在pb目录下执行
    ```shell
-    goctl rpc protoc msg-gateway.proto --go_out=../ --go-grpc_out=../  --zrpc_out=../
+    goctl rpc protoc msggateway.proto --go_out=../ --go-grpc_out=../  --zrpc_out=../
     ```
 4. 可将ws.proto删掉
 5. 点进msg-gateway.pb.go文件，在import中添加  pb "goChat/app/msg/cmd/rpc/pb"，然后在
@@ -131,7 +131,7 @@
 8. 在wsrpc目录下运行go run msggateway.go显示如下信息表示运行成功。
     ```shell
    {"@timestamp":"2023-05-23T22:55:44.942+08:00","caller":"wsrpc/msggateway.go:64","content":"ws 启动成功 等待1秒启动 rpc","level":"info"}
-   Starting server at 0.0.0.0:8888...
+   Starting rpcserver at 0.0.0.0:8888...
    Starting rpc rpcserver at 0.0.0.0:8080...
     ```
 9. 可将wsapi文件删去

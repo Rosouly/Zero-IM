@@ -652,7 +652,7 @@ func (d *Decoder) decodeMapFromStruct(name string, dataVal reflect.Value, val re
 		tagValue := f.Tag.Get(d.config.TagName)
 		keyName := f.Name
 
-		// If Squash is set in the config, we squash the field down.
+		// If Squash is set in the rpcconfig, we squash the field down.
 		squash := d.config.Squash && v.Kind() == reflect.Struct && f.Anonymous
 
 		// Determine the name of the key in the map
@@ -805,7 +805,7 @@ func (d *Decoder) decodeSlice(name string, data interface{}, val reflect.Value) 
 	if dataValKind != reflect.Array && dataValKind != reflect.Slice {
 		if d.config.WeaklyTypedInput {
 			switch {
-			// Slice and array we use the normal logic
+			// Slice and array we use the normal rpclogic
 			case dataValKind == reflect.Slice, dataValKind == reflect.Array:
 				break
 

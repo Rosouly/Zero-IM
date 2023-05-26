@@ -20,8 +20,8 @@ import (
 	"time"
 )
 
-var wsConfigFile = flag.String("w", "etc/msggateway-ws.yaml", "ws config file")
-var rpcConfigFile = flag.String("r", "etc/msggateway-rpc.yaml", "rpc config file")
+var wsConfigFile = flag.String("w", "etc/msggateway-ws.yaml", "ws rpcconfig file")
+var rpcConfigFile = flag.String("r", "etc/msggateway-rpc.yaml", "rpc rpcconfig file")
 
 func ws() {
 	flag.Parse()
@@ -35,7 +35,7 @@ func ws() {
 	ctx := wssvc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
 
-	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
+	fmt.Printf("Starting rpcserver at %s:%d...\n", c.Host, c.Port)
 	server.Start()
 }
 

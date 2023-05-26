@@ -1,16 +1,32 @@
 Name: usercenter.rpc
 ListenOn: 0.0.0.0:8080
-Mode: dev
-Mysql:
-  DataSource: root:PXDN93VRKUm8TeE7@tcp(127.0.0.1:33069)/zeroim?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
-Etcd:
-  Hosts:
-    - 0.0.0.0:2379
-  Key: usercenter.rpc
-CacheRedis:
-  - Host: 0.0.0.0:36379
-    Pass: G62m50oigInC30sf
-    Type: node
-JwtAuth:
-  AccessSecret: "whatDoYouMean"
-  AccessExpire: 7200
+#Mode: dev
+#Mysql:
+#  DataSource: root:PXDN93VRKUm8TeE7@tcp(127.0.0.1:33069)/zeroim?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+#Etcd:
+#  Hosts:
+#    - 0.0.0.0:2379
+#  Key: usercenter.rpc
+#CacheRedis:
+#  - Host: 0.0.0.0:36379
+#    Pass: G62m50oigInC30sf
+#    Type: node
+#JwtAuth:
+#  AccessSecret: "whatDoYouMean"
+#  AccessExpire: 7200
+
+RedisConfig:
+  Host: 0.0.0.0:36379
+  Pass: "G62m50oigInC30sf"
+  Type: node
+  DB: 1
+
+MysqlConfig:
+  Addr: "root:PXDN93VRKUm8TeE7@tcp(127.0.0.1:33069)/zeroim?charset=utf8mb4&parseTime=True&loc=Local&timeout=20s&readTimeout=20s&writeTimeout=20s"
+  MaxIdleConns: 10
+  MaxOpenConns: 10
+  LogLevel: INFO
+
+TokenRateLimiter:
+  Seconds: 100
+  Quota: 100
