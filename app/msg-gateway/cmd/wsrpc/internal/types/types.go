@@ -10,5 +10,5 @@ type Request struct {
 type Response struct {
 	Uid     string `json:"uid"`
 	ErrMsg  string `json:"errMsg"`
-	Success string `json:"success"`
+	Success bool `json:"success"`
 }

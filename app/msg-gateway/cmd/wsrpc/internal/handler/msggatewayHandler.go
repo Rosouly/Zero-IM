@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
@@ -17,10 +18,11 @@ func msggatewayHandler(svcCtx *wssvc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := wslogic.NewMsggatewayLogic(r.Context(), svcCtx)
-		resp, err := l.Msggateway(&req)
-		if err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
+		ws := wslogic.NewMsggatewayLogic(context.Background(), svcCtx)
+		resp, ok := ws.Msggateway(&req)
+		status := http.StatusUnauthorized
+		if ok {
+			err := ws.WsUpgrade
 		} else {
 			httpx.OkJsonCtx(r.Context(), w, resp)
 		}
