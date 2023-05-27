@@ -1,8 +1,13 @@
 package wslogic
 
-import "sync"
+import (
+	"github.com/go-playground/validator/v10"
+	"sync"
+)
 
 var (
-	userCount uint64
-	rwLock    *sync.RWMutex
+	userCount       uint64
+	rwLock          *sync.RWMutex
+	validate        *validator.Validate
+	sendMsgAllCount uint64
 )

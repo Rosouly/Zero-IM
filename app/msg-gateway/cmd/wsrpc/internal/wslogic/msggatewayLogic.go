@@ -7,6 +7,7 @@ import (
 	"goChat/app/msg-gateway/cmd/wsrpc/internal/wsrepository"
 	"goChat/app/msg-gateway/cmd/wsrpc/internal/wssvc"
 	"goChat/app/usercenter/cmd/rpc/pb"
+	"goChat/common/xtrace"
 	"net/http"
 	"sync"
 	"time"
@@ -99,5 +100,31 @@ func (l *MsggatewayLogic) WsUpgrade(uid string, req *types.Request, w http.Respo
 	}
 	newConn := &UserConn{conn, new(sync.Mutex)}
 	userCount++
-	l.addUserConn()
+	l.addUserConn(uid, req.PlatformID, newConn, req.Token)
+	go l.readMsg(newConn)
+}
+
+func (l *MsggatewayLogic) readMsg(conn *UserConn, uid string, platform string) {
+	for {
+		messageType, msg, err := conn.ReadMessage()
+		if messageType == websocket.PingMessage {
+			l.sendMsg(context.Background(), conn, Resp{
+				ReqIdentifier: 0,
+				ErrCode:       0,
+				ErrMsg:        "",
+				Data:          []byte("pong"),
+			})
+		}
+		if err != nil {
+			uid, platform := l.getUserUid(conn)
+			logx.Error("WS ReadMsg error ", " userIP ", conn.RemoteAddr().String(), " userUid ", uid, " platform ", platform, " error ", err.Error())
+			userCount--
+			l.delUserConn(conn)
+			return
+		}
+		// xtrace
+		xtrace.RunWithTrace("", func(ctx context.Context) {
+			l.msgParse
+		})
+	}
 }

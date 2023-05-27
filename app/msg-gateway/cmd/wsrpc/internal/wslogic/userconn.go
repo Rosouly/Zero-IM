@@ -24,6 +24,19 @@ func (l *MsggatewayLogic) addUserConn(uid string, platformID string, conn *UserC
 	}
 }
 
+func (l *MsggatewayLogic) getUserUid(conn *UserConn) (uid string, platform string) {
+	rwLock.RLock()
+	defer rwLock.RUnlock()
+	if oldStringMap, ok := l.wsConnToUser[conn]; ok {
+		for k, v := range oldStringMap {
+			platform = k
+			uid = v
+		}
+		return uid, platform
+	}
+	return "", ""
+}
+
 func (l *MsggatewayLogic) delUserConn(conn *UserConn) {
 	rwLock.Lock()
 	defer rwLock.Unlock()

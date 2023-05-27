@@ -2,7 +2,7 @@ package types
 
 import (
 	"fmt"
-	"github.com/Path-IM/Path-IM-Server-Demo/common/xerr"
+	"goChat/common/xerr"
 )
 
 var WSDataError = xerr.New(3001, "ws data error")
