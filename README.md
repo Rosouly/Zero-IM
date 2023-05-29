@@ -28,11 +28,11 @@ docker-compose -f docker-compose-env.yml up -d
 技术栈
 - go-zero
 - redis
-- mysql or mongodb?
+- mysql
+- mongodb
 - kafka
 - etcd
-- k8s
-- prometheus
+- (prometheus)
 - jaeger
 - jenkins
 - docker
