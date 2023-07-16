@@ -47,6 +47,7 @@ func (r *RelationMapping) Exist(
 	// cacheExist
 	{
 		cacheExist, _ = r.rc.Exists(ctx, key).Result()
+		fmt.Println("cacheExist:", cacheExist)
 	}
 	// 缓存中不存在
 	if cacheExist == 0 {
@@ -61,6 +62,7 @@ func (r *RelationMapping) Exist(
 	// 取缓存中查询
 	{
 		_, err := r.rc.ZRank(ctx, key, unknownValue).Result()
+		fmt.Println("ZRank:", err)
 		return !errors.Is(err, redis.Nil), nil
 	}
 }
@@ -78,6 +80,7 @@ func (r *RelationMapping) mysql2cache(
 	knownMap map[string]interface{},
 	option *relationOption,
 ) error {
+	fmt.Println("mysql2cache")
 	var found []struct {
 		Score  Score  `gorm:"column:sortBy;type:longtext;"`
 		Member Member `gorm:"column:unknownField;type:longtext;"`

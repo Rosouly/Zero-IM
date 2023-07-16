@@ -13,7 +13,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *wssvc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
-				Method:  http.MethodPost,
+				Method:  http.MethodGet,
 				Path:    "/",
 				Handler: msggatewayHandler(serverCtx),
 			},

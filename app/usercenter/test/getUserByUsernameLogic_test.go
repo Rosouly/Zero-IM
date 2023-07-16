@@ -9,7 +9,7 @@ import (
 func TestGetUserByUsernameLogic(t *testing.T) {
 	resp, err := usercenterService.GeTUserByUsername(
 		context.Background(), &pb.GeTUserByUsernameReq{
-			Username: "小明",
+			Username: "user01",
 		},
 	)
 	if err != nil {

@@ -30,7 +30,6 @@ func NewLoginByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginBy
 }
 
 func (l *LoginByIdLogic) LoginById(in *pb.LoginByIdReq) (*pb.LoginByIdResp, error) {
-	// todo:
 	claim := jwtUtils.BuildClaims(in.UserId, "web")
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
 	signedString, err := token.SignedString([]byte(l.svcCtx.Config.TokenSecret))

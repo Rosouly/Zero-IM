@@ -1,6 +1,24 @@
 Name: chat.rpc
-ListenOn: 0.0.0.0:8080
+ListenOn: 0.0.0.0:8088
 Etcd:
   Hosts:
-  - 127.0.0.1:2379
+  - 0.0.0.0:2379
   Key: chat.rpc
+
+
+MessageVerify:
+  FriendVerify: false # 非好友可以发送消息
+
+ImUserRpc:
+  Endpoints:
+    - 0.0.0.0:8082
+
+Kafka:
+  Online:
+    Brokers:
+      - 0.0.0.0:9092
+    Topic: im_msg_online
+  Offline:
+    Brokers:
+      - 0.0.0.0:9092
+    Topic: im_msg_offline

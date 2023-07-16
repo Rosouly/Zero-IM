@@ -96,37 +96,51 @@ services:
   #      - kafka
   #
   #
-  #  #zookeeper是kafka的依赖 - Zookeeper is the dependencies of Kafka
-  #  zookeeper:
-  #    image: wurstmeister/zookeeper
-  #    container_name: zookeeper
-  #    environment:
-  #      # 时区上海 - Time zone Shanghai (Change if needed)
-  #      TZ: Asia/Shanghai
-  #    restart: always
-  #    ports:
-  #      - 2181:2181
-  #    networks:
-  #      - looklook_net
-  #
-  #  #消息队列 - Message queue
-  #  kafka:
-  #    image: wurstmeister/kafka
-  #    container_name: kafka
-  #    ports:
-  #      - 9092:9092
-  #    environment:
-  #      - KAFKA_ADVERTISED_HOST_NAME=kafka
-  #      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-  #      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=false
-  #      - TZ=Asia/Shanghai
-  #    restart: always
-  #    volumes:
-  #      - /var/run/docker.sock:/var/run/docker.sock
-  #    networks:
-  #      - looklook_net
-  #    depends_on:
-  #      - zookeeper
+  #zookeeper是kafka的依赖 - Zookeeper is the dependencies of Kafka
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    environment:
+      # 时区上海 - Time zone Shanghai (Change if needed)
+      TZ: Asia/Shanghai
+    restart: always
+    ports:
+      - 2181:2181
+    networks:
+      - zero_chat
+
+#  消息队列 - Message queue
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - 9092:9092
+    environment:
+      - KAFKA_ADVERTISED_HOST_NAME=localhost
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+      - TZ=Asia/Shanghai
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - zero_chat
+    depends_on:
+      - zookeeper
+#  zookeeper:
+#    image: wurstmeister/zookeeper
+#    ports:
+#      - "2181:2181"
+#
+#  kafka:
+#    image: wurstmeister/kafka
+#    ports:
+#      - "9092:9092"
+#    environment:
+#      KAFKA_ADVERTISED_HOST_NAME: localhost
+#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
+  # 监控 - Monitoring
   prometheus:
       image: prom/prometheus:v2.28.1
       container_name: prometheus
@@ -146,6 +160,7 @@ services:
       networks:
         - zero_chat
 
+  # 服务发现 - Service discovery
   etcd:
     image: appcelerator/etcd
     container_name: etcd
@@ -156,7 +171,6 @@ services:
     restart: always
     networks:
       - zero_chat
-
 
   mysql:
     image: mysql/mysql-server:8.0.28

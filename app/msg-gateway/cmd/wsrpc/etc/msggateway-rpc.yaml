@@ -12,3 +12,9 @@ Telemetry:
   Endpoint: http://127.0.0.1:14268/api/traces
   Sampler: 1.0
   Batcher: jaeger
+
+RedisConfig:
+  Host: 0.0.0.0:36379
+  Pass: "G62m50oigInC30sf"
+  Type: node
+  DB: 1

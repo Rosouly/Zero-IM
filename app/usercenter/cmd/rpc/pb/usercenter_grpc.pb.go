@@ -68,7 +68,7 @@ func (c *usercenterServiceClient) LoginById(ctx context.Context, in *LoginByIdRe
 	return out, nil
 }
 
-// UsercenterServiceServer is the rpcserver API for UsercenterService service.
+// UsercenterServiceServer is the server API for UsercenterService service.
 // All implementations must embed UnimplementedUsercenterServiceServer
 // for forward compatibility
 type UsercenterServiceServer interface {

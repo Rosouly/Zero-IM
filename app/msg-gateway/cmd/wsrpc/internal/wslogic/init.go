@@ -11,3 +11,8 @@ var (
 	validate        *validator.Validate
 	sendMsgAllCount uint64
 )
+
+func init() {
+	rwLock = new(sync.RWMutex)
+	validate = validator.New()
+}

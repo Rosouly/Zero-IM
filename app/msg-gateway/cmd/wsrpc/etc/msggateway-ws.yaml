@@ -9,3 +9,29 @@ Telemetry:
   Endpoint: http://127.0.0.1:14268/api/traces
   Sampler: 1.0
   Batcher: jaeger
+
+Redis:
+  Host: 0.0.0.0:36379
+  Pass: "G62m50oigInC30sf"
+  Type: node
+  DB: 1
+
+Websocket:
+  MaxConnNum: 10000
+  TimeOut: 10
+  MaxMsgLen: 4096
+
+SendMsgRateLimit:
+  Enable: true
+  Seconds: 100
+  Quota: 100
+
+
+# rpc
+ImUserRpc:
+  Endpoints:
+    - 0.0.0.0:8082
+
+MsgRpc:
+  Endpoints:
+    - 0.0.0.0:8088

@@ -2,7 +2,9 @@ package wslogic
 
 import (
 	"context"
+	"fmt"
 	"github.com/gorilla/websocket"
+	"go.opentelemetry.io/otel/attribute"
 	"goChat/app/msg-gateway/cmd/wsrpc/internal/types"
 	"goChat/app/msg-gateway/cmd/wsrpc/internal/wsrepository"
 	"goChat/app/msg-gateway/cmd/wsrpc/internal/wssvc"
@@ -58,12 +60,15 @@ func NewMsggatewayLogic(ctx context.Context, svcCtx *wssvc.ServiceContext) *Msgg
 }
 
 func (l *MsggatewayLogic) Msggateway(req *types.Request) (*types.Response, bool) {
-	// todo: add your wslogic here and delete this line
+	fmt.Println("调用rpc验证token")
+	// 调用rpc验证token
 	if len(req.Token) != 0 && len(req.PlatformID) != 0 && len(req.SendID) != 0 {
+		fmt.Println("前")
 		resp, err := l.svcCtx.ImUserService.VerifyToken(l.ctx, &pb.VerifyTokenReq{
 			Token:  req.Token,
 			SendID: req.SendID,
 		})
+		fmt.Println("后")
 		if err != nil {
 			logx.WithContext(l.ctx).Errorf("调用VerifyToken失败，err: %s", err.Error())
 			return &types.Response{
@@ -94,19 +99,26 @@ func (l *MsggatewayLogic) Msggateway(req *types.Request) (*types.Response, bool)
 }
 
 func (l *MsggatewayLogic) WsUpgrade(uid string, req *types.Request, w http.ResponseWriter, r *http.Request, header http.Header) error {
+	fmt.Println("---WsUpgrade")
 	conn, err := l.wsUpGrader.Upgrade(w, r, header)
 	if err != nil {
 		return err
 	}
 	newConn := &UserConn{conn, new(sync.Mutex)}
 	userCount++
+	fmt.Println("addUserConn start")
 	l.addUserConn(uid, req.PlatformID, newConn, req.Token)
-	go l.readMsg(newConn)
+	fmt.Println("addUserConn end")
+	go l.readMsg(newConn, uid, req.PlatformID)
+	fmt.Println("WsUpgrade end")
+	return nil
 }
 
 func (l *MsggatewayLogic) readMsg(conn *UserConn, uid string, platform string) {
+	fmt.Println("readMsg")
 	for {
 		messageType, msg, err := conn.ReadMessage()
+		//conn.WriteMessage(messageType, append([]byte("还给你："), msg...))
 		if messageType == websocket.PingMessage {
 			l.sendMsg(context.Background(), conn, Resp{
 				ReqIdentifier: 0,
@@ -124,7 +136,13 @@ func (l *MsggatewayLogic) readMsg(conn *UserConn, uid string, platform string) {
 		}
 		// xtrace
 		xtrace.RunWithTrace("", func(ctx context.Context) {
-			l.msgParse
+			l.msgParse(ctx, conn, msg, uid, platform)
+		}, attribute.KeyValue{
+			Key:   "uid",
+			Value: attribute.StringValue(uid),
+		}, attribute.KeyValue{
+			Key:   "platform",
+			Value: attribute.StringValue(platform),
 		})
 	}
 }

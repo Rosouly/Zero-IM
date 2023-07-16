@@ -31,5 +31,6 @@ func (l *MsggatewayLogic) argsValidate(m *msggatewaypb.Req, r int32) (isPass boo
 		return true, types.ErrCodeOK, "", data
 	default:
 	}
+
 	return false, types.ErrCodeParams, "args err", nil
 }

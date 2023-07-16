@@ -1,8 +1,12 @@
 package wslogic
 
-import "github.com/zeromicro/go-zero/core/logx"
+import (
+	"fmt"
+	"github.com/zeromicro/go-zero/core/logx"
+)
 
 func (l *MsggatewayLogic) addUserConn(uid string, platformID string, conn *UserConn, token string) {
+	fmt.Println("addUserConn start")
 	rwLock.Lock()
 	defer rwLock.Unlock()
 	if oldConnMap, ok := l.wsUserToConn[uid]; ok {
@@ -13,7 +17,7 @@ func (l *MsggatewayLogic) addUserConn(uid string, platformID string, conn *UserC
 		i[platformID] = conn
 		l.wsUserToConn[uid] = i
 	}
-
+	fmt.Println("addUserConn mid")
 	if oldStringMap, ok := l.wsConnToUser[conn]; ok {
 		oldStringMap[platformID] = uid
 		l.wsConnToUser[conn] = oldStringMap
@@ -21,6 +25,11 @@ func (l *MsggatewayLogic) addUserConn(uid string, platformID string, conn *UserC
 		i := make(map[string]string)
 		i[platformID] = uid
 		l.wsConnToUser[conn] = i
+	}
+	fmt.Println("addUserConn end")
+	count := 0
+	for _, v := range l.wsUserToConn {
+		count = count + len(v)
 	}
 }
 

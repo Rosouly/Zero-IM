@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"fmt"
 	"github.com/zeromicro/go-zero/core/logx"
 	"goChat/app/usercenter/cmd/rpc/internal/repository"
 	"goChat/app/usercenter/cmd/rpc/internal/svc"
@@ -28,7 +29,7 @@ func NewGeTUserByUsernameLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 }
 
 func (l *GeTUserByUsernameLogic) GeTUserByUsername(in *pb.GeTUserByUsernameReq) (*pb.GeTUserResp, error) {
-	// todo: getUserByUsername-rpclogic
+	fmt.Println("GeTUserByUsernameLogic.GeTUserByUsername")
 	user := &model.User{}
 	user.Username = in.Username
 	err := l.rep.DetailCache.FirstByWhere(

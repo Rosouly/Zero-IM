@@ -12,6 +12,7 @@ type Config struct {
 	SendMsgRateLimit RateLimitConfig
 	Websocket        WebsocketConfig
 	ImUserRpc        zrpc.RpcClientConf
+	MsgRpc           zrpc.RpcClientConf
 }
 
 type RateLimitConfig struct {

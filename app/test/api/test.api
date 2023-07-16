@@ -1,0 +1,25 @@
+syntax = "v1"
+
+info(
+	title: "type title here"
+	desc: "type desc here"
+	author: "type author here"
+	email: "type email here"
+	version: "type version here"
+)
+
+type testRequest {
+	Username string `form:"username"`
+}
+
+type testResponse {
+	Exist bool `json:"exist"`
+}
+
+service Rosy {
+	@doc(
+		summary: "用户名是否存在"
+	)
+	@handler isUsernameExist
+	get /test (testRequest) returns (testResponse)
+}
