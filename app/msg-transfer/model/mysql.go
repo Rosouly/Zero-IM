@@ -33,7 +33,8 @@ type MysqlSingleChat struct {
 }
 
 func (s *MysqlSingleChat) TableName() string {
-	return "single_msg_" + s.GetConversationID()
+	//return "single_msg_" + s.GetConversationID()
+	return "single_msg"
 }
 
 func (s *MysqlSingleChat) GetConversationID() string {

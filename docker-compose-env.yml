@@ -106,8 +106,8 @@ services:
     restart: always
     ports:
       - 2181:2181
-    networks:
-      - zero_chat
+#    networks:
+#      - zero_chat
 
 #  消息队列 - Message queue
   kafka:
@@ -116,17 +116,17 @@ services:
     ports:
       - 9092:9092
     environment:
-      - KAFKA_ADVERTISED_HOST_NAME=localhost
+      - KAFKA_ADVERTISED_HOST_NAME=172.19.0.3
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+#      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
       - TZ=Asia/Shanghai
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - zero_chat
-    depends_on:
-      - zookeeper
+#    networks:
+#      - zero_chat
+#    depends_on:
+#      - zookeeper
 #  zookeeper:
 #    image: wurstmeister/zookeeper
 #    ports:

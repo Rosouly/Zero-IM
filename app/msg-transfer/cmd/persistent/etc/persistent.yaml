@@ -16,9 +16,24 @@ Telemetry:
   Sampler: 1.0
   Batcher: jaeger
 
+MysqlConfig:
+  Addr: "root:PXDN93VRKUm8TeE7@tcp(127.0.0.1:33069)/zeroim?charset=utf8mb4&parseTime=True&loc=Local&timeout=20s&readTimeout=20s&writeTimeout=20s"
+  MaxIdleConns: 10
+  MaxOpenConns: 10
+  LogLevel: INFO
+
 
 Kafka:
   Online:
     Brokers:
       - 0.0.0.0:9092
     Topic: im_msg_online
+    MsgToMysqlGroupID: msgtransfer_persistent_online
+  SinglePush:
+    Brokers:
+      - 0.0.0.0:9092
+    Topic: im_msg_push_single
+
+MsgPushRpc:
+  Endpoints:
+    - 0.0.0.0:8090

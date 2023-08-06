@@ -75,19 +75,20 @@ func (l *SendMsgLogic) SendMsg(pb *pb.SendMsgReq) (*pb.SendMsgResp, error) {
 		msgToMQSingle.MsgData = pb.MsgData
 		logx.WithContext(l.ctx).Info(msgToMQSingle.String())
 		// 发送消息，token，接收方id，以及在线状态给kafka
+		fmt.Println("接收方id: ", msgToMQSingle.MsgData.RecvID)
 		err1 := l.sendMsgToKafka(&msgToMQSingle, msgToMQSingle.MsgData.RecvID, types.OnlineStatus)
 		if err1 != nil {
 			logx.WithContext(l.ctx).Error(msgToMQSingle.OperationID, "kafka send msg err:RecvID ", msgToMQSingle.MsgData.RecvID, msgToMQSingle.String())
 			return returnMsg(&replay, pb, 201, "kafka send msg err ", "", 0)
 		}
 		//}
-		if msgToMQSingle.MsgData.SendID != msgToMQSingle.MsgData.RecvID { //Filter messages sent to yourself
-			err2 := l.sendMsgToKafka(&msgToMQSingle, msgToMQSingle.MsgData.SendID, types.OnlineStatus)
-			if err2 != nil {
-				logx.WithContext(l.ctx).Error(msgToMQSingle.OperationID, "kafka send msg err:SendID ", msgToMQSingle.MsgData.SendID, msgToMQSingle.String())
-				return returnMsg(&replay, pb, 201, "kafka send msg err ", "", 0)
-			}
-		}
+		//if msgToMQSingle.MsgData.SendID != msgToMQSingle.MsgData.RecvID { //Filter messages sent to yourself
+		//	err2 := l.sendMsgToKafka(&msgToMQSingle, msgToMQSingle.MsgData.SendID, types.OnlineStatus)
+		//	if err2 != nil {
+		//		logx.WithContext(l.ctx).Error(msgToMQSingle.OperationID, "kafka send msg err:SendID ", msgToMQSingle.MsgData.SendID, msgToMQSingle.String())
+		//		return returnMsg(&replay, pb, 201, "kafka send msg err ", "", 0)
+		//	}
+		//}
 		return returnMsg(&replay, pb, 0, "", msgToMQSingle.MsgData.ServerMsgID, msgToMQSingle.MsgData.ServerTime)
 
 	case types.GroupChatType:

@@ -35,6 +35,10 @@ type MsggatewayLogic struct {
 
 var msgGatewayLogic *MsggatewayLogic
 
+func GetMsgGatewayLogic() *MsggatewayLogic {
+	return msgGatewayLogic
+}
+
 func NewMsggatewayLogic(ctx context.Context, svcCtx *wssvc.ServiceContext) *MsggatewayLogic {
 	if msgGatewayLogic != nil {
 		return msgGatewayLogic
@@ -107,6 +111,7 @@ func (l *MsggatewayLogic) WsUpgrade(uid string, req *types.Request, w http.Respo
 	newConn := &UserConn{conn, new(sync.Mutex)}
 	userCount++
 	fmt.Println("addUserConn start")
+	fmt.Println("newConn", newConn)
 	l.addUserConn(uid, req.PlatformID, newConn, req.Token)
 	fmt.Println("addUserConn end")
 	go l.readMsg(newConn, uid, req.PlatformID)

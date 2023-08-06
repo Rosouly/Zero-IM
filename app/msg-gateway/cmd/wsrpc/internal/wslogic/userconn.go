@@ -1,8 +1,11 @@
 package wslogic
 
 import (
+	"context"
 	"fmt"
+	"github.com/gorilla/websocket"
 	"github.com/zeromicro/go-zero/core/logx"
+	"goChat/app/msg-gateway/cmd/wsrpc/pb"
 )
 
 func (l *MsggatewayLogic) addUserConn(uid string, platformID string, conn *UserConn, token string) {
@@ -27,9 +30,13 @@ func (l *MsggatewayLogic) addUserConn(uid string, platformID string, conn *UserC
 		l.wsConnToUser[conn] = i
 	}
 	fmt.Println("addUserConn end")
+	fmt.Println("uid, platformID", uid, platformID)
 	count := 0
 	for _, v := range l.wsUserToConn {
 		count = count + len(v)
+	}
+	for _, v := range l.wsUserToConn {
+		fmt.Println("v: ", v)
 	}
 }
 
@@ -94,5 +101,18 @@ func (l *MsggatewayLogic) DelUserConn(uid string, platform string) {
 				delete(oldConnMap, platform)
 			}
 		}
+	}
+}
+
+func (l *MsggatewayLogic) SendMsgToUser(ctx context.Context, conn *UserConn, bMsg []byte, in *pb.OnlinePushMsgReq, RecvPlatForm, RecvID string) (ResultCode int64) {
+	fmt.Println("SendMsgToUser start")
+	err := l.writeMsg(conn, websocket.BinaryMessage, bMsg)
+	if err != nil {
+		logx.WithContext(ctx).Error("send msg to user err ", "", "err ", err.Error())
+		ResultCode = -2
+		return ResultCode
+	} else {
+		ResultCode = 0
+		return ResultCode
 	}
 }

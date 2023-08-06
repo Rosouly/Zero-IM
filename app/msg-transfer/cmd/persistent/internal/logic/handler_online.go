@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/golang/protobuf/proto"
 	"github.com/zeromicro/go-zero/core/logx"
+	pushpb "goChat/app/msg-push/cmd/rpc/pb"
 	"goChat/app/msg-transfer/cmd/persistent/internal/repository"
 	"goChat/app/msg-transfer/cmd/persistent/internal/svc"
 	chatpb "goChat/app/msg/cmd/rpc/pb"
@@ -54,6 +55,7 @@ func (l *MsgTransferPersistentOnlineLogic) Do(msg []byte, msgKey string) (err er
 	}
 	logx.WithContext(l.ctx).Infof("msg: %v", msgFromMQ.String())
 	isPersistent := utils.GetSwitchFromOptions(msgFromMQ.MsgData.Options, types.IsPersistent)
+	isSenderSync := utils.GetSwitchFromOptions(msgFromMQ.MsgData.Options, types.IsSenderSync)
 	switch msgFromMQ.MsgData.SessionType {
 	case types.SingleChatType:
 		xtrace.StartFuncSpan(l.ctx, "MsgTransferPersistentOnlineLogic.ChatMs2Mongo.SingleChat", func(ctx context.Context) {
@@ -65,6 +67,10 @@ func (l *MsgTransferPersistentOnlineLogic) Do(msg []byte, msgKey string) (err er
 					return
 				}
 				singleMsgSuccessCount++
+			}
+			if !isSenderSync && msgKey == msgFromMQ.MsgData.SendID {
+			} else {
+				go l.sendMessageToPush(ctx, &msgFromMQ, msgKey)
 			}
 		})
 	case types.GroupChatType:
@@ -93,4 +99,20 @@ func (l *MsgTransferPersistentOnlineLogic) Do(msg []byte, msgKey string) (err er
 		return
 	}
 	return
+}
+
+func (l *MsgTransferPersistentOnlineLogic) sendMessageToPush(ctx context.Context, message *chatpb.MsgDataToMQ, pushToUserID string) {
+	logx.WithContext(ctx).Info("msg_transfer send message to push", "message", message.String())
+	rpcPushMsg := pushpb.PushMsgReq{MsgData: message.MsgData, PushToUserID: pushToUserID}
+	_, err := l.svcCtx.MsgPush.PushMsg(ctx, &rpcPushMsg)
+	if err != nil {
+		logx.WithContext(ctx).Error("rpc send failed", "push data", rpcPushMsg.String(), "err", err.Error())
+		mqPushMsg := chatpb.PushMsgDataToMQ{MsgData: message.MsgData, PushToUserID: pushToUserID, OperationID: xtrace.TraceIdFromContext(l.ctx)}
+		pid, offset, err := l.svcCtx.SinglePushProducer.SendMessage(ctx, &mqPushMsg)
+		if err != nil {
+			logx.WithContext(ctx).Error("kafka send failed", mqPushMsg.OperationID, "send data", mqPushMsg.String(), "pid", pid, "offset", offset, "err", err.Error())
+		}
+	} else {
+		logx.WithContext(ctx).Info("rpc send success", "push data", rpcPushMsg.String())
+	}
 }

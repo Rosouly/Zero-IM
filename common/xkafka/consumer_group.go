@@ -31,7 +31,7 @@ func NewMConsumerGroup(consumerConfig *MConsumerGroupConfig, topics, addr []stri
 	if err != nil {
 		panic(err.Error())
 	}
-	logx.Info("consumer group:%s, topics:%v, addr:%v", groupID, topics, addr)
+	logx.Infof("consumer group:%s , topics:%v , addr:%v", groupID, topics, addr)
 	return &MConsumerGroup{
 		consumerGroup,
 		groupID,
@@ -42,8 +42,10 @@ func (mc *MConsumerGroup) RegisterHandleAndConsumer(handler sarama.ConsumerGroup
 	ctx := context.Background()
 	for {
 		err := mc.ConsumerGroup.Consume(ctx, mc.topics, handler)
+		logx.Info("consumer err: ", err)
 		if err != nil {
 			panic(err.Error())
 		}
+
 	}
 }

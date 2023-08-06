@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"go.opentelemetry.io/otel/attribute"
 	onlinemessagerelayservice "goChat/app/msg-gateway/cmd/wsrpc/onlineMessageRelayService"
 	gatewaypb "goChat/app/msg-gateway/cmd/wsrpc/pb"
@@ -52,6 +53,7 @@ func NewPushMsgLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PushMsgLo
 }
 
 func (l *PushMsgLogic) PushMsg(in *pb.PushMsgReq) (*pb.PushMsgResp, error) {
+	fmt.Println("from transfer to push ----- PushMsg")
 	l.MsgToUser(in)
 	return &pb.PushMsgResp{ResultCode: 0}, nil
 }
@@ -66,9 +68,13 @@ func (l *PushMsgLogic) getAllMsgGatewayService() (services []onlinemessagerelays
 
 func (l *PushMsgLogic) MsgToUser(pushMsg *pb.PushMsgReq) {
 	var wsResult []*gatewaypb.SingleMsgToUser
+	fmt.Println("GetSwitchFromOptions start")
 	isOfflinePush := utils.GetSwitchFromOptions(pushMsg.MsgData.Options, types.IsOfflinePush)
+	isOfflinePush = false
+	fmt.Println("GetAllByEtcd start")
+	services, err := onlinemessagerelayservice.GetAllByEtcd(l.ctx, l.svcCtx.Config.MsgGatewayRpc, l.svcCtx.Config.MsgGatewayRpc.Key)
 
-	services, err := l.getAllMsgGatewayService()
+	fmt.Println("services ", services)
 	if err != nil {
 		l.Errorf("getAllMsgGatewayService error: %v", err)
 		err = nil
@@ -77,6 +83,7 @@ func (l *PushMsgLogic) MsgToUser(pushMsg *pb.PushMsgReq) {
 		var reply *gatewaypb.OnlinePushMsgResp
 		var err error
 		xtrace.StartFuncSpan(l.ctx, "MsgToUser.OnlinePushMsg", func(ctx context.Context) {
+			fmt.Println("OnlinePushMsg start")
 			reply, err = msgClient.OnlinePushMsg(ctx, &gatewaypb.OnlinePushMsgReq{MsgData: pushMsg.MsgData, PushToUserID: pushMsg.PushToUserID})
 		}, attribute.Int("index", index))
 		if err != nil {

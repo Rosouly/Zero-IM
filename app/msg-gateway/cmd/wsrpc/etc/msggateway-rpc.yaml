@@ -1,9 +1,9 @@
-Name: msggateway.rpc
+Name: msggateway-rpc
 ListenOn: 0.0.0.0:8086
 Etcd:
   Hosts:
   - 0.0.0.0:2379
-  Key: msggateway.rpc
+  Key: msggateway-rpc
 
 
 Telemetry:

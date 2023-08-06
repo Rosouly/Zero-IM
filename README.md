@@ -29,11 +29,8 @@ docker-compose -f docker-compose-env.yml up -d
 - go-zero
 - redis
 - mysql
-- mongodb
 - kafka
 - etcd
-- (prometheus)
-- jaeger
 - jenkins
 - docker
 

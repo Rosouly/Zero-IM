@@ -1,9 +1,9 @@
 Name: msgpush-rpc
-ListenOn: 192.168.2.77:10170
+ListenOn: 0.0.0.0:8090
 
 MsgGatewayEtcd:
   Hosts:
-    - 127.0.0.1:2379
+    - 0.0.0.0:2379
   Key: msggateway-rpc
 
 Log:
@@ -32,19 +32,19 @@ Telemetry:
 
 MsgGatewayRpc:
   Hosts:
-    - 192.168.2.77:2379
+    - 0.0.0.0:2379
   Key: msggateway-rpc
 ImUserRpc:
   Endpoints:
-    - 192.168.2.77:10240
+    - 0.0.0.0:8082
 
 SinglePushConsumer:
   Brokers:
-    - 172.27.10.3:9092
+    - 0.0.0.0:9092
   Topic: im_msg_push_single
   SinglePushGroupID: "im_msg_push_single_group"
 SuperGroupPushConsumer:
   Brokers:
-    - 172.27.10.3:9092
+    - 0.0.0.0:9092
   Topic: im_msg_push_supergroup
   SuperGroupPushGroupID: "im_msg_push_supergroup_group"

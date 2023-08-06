@@ -1,6 +1,7 @@
 package test
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/golang/protobuf/proto"
 	"github.com/gorilla/websocket"
@@ -11,8 +12,8 @@ import (
 
 func TestWebsocketRequest(t *testing.T) {
 	sendId := "9be675b41ff6feb3c21e528b92c812c1"
-	platformId := "2"
-	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVSUQiOiI5YmU2NzViNDFmZjZmZWIzYzIxZTUyOGI5MmM4MTJjMSIsIlBsYXRmb3JtIjoid2ViIiwiZXhwIjo0ODQyNjM5NzQ0LCJuYmYiOjE2ODkwMzk3NDQsImlhdCI6MTY4OTAzOTc0NH0.U5FRfhKoTukVGm-UPhfq2V8HqRnq_SvuGBJGIeTEwcE"
+	platformId := "6"
+	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVSUQiOiI5YmU2NzViNDFmZjZmZWIzYzIxZTUyOGI5MmM4MTJjMSIsIlBsYXRmb3JtIjoid2ViIiwiZXhwIjo0ODQzNTA2NzA0LCJuYmYiOjE2ODk5MDY3MDQsImlhdCI6MTY4OTkwNjcwNH0.G8ch_Op8NFI_ng7ZcXy1HdAl9ThDOZKSOKlDVcVQaXo"
 	dialer := websocket.DefaultDialer
 	// 添加自定义 header，如果需要的话
 	url := fmt.Sprintf("ws://localhost:8084/?token=%s&sendId=%s&platformId=%s", token, sendId, platformId)
@@ -24,19 +25,26 @@ func TestWebsocketRequest(t *testing.T) {
 	fmt.Println("connect success")
 	defer conn.Close()
 
+	data := "hello world"
+
+	contentBytes, err := json.Marshal(data)
+	if err != nil {
+		t.Error("json Marshal", err)
+	}
+
 	chatMsg := &chatpb.MsgData{
 		SendID:           "9be675b41ff6feb3c21e528b92c812c1", // user01
 		RecvID:           "2293575ce049296775c19640a61eab77", // user02
 		GroupID:          "test_group",
 		ClientMsgID:      "test_client_msg_id",
 		ServerMsgID:      "test_server_msg_id",
-		SenderPlatformID: 1,
+		SenderPlatformID: 6,
 		SenderNickname:   "test_nickname",
 		SenderFaceURL:    "https://example.com/avatar.jpg",
 		SessionType:      1,
 		MsgFrom:          1,
 		ContentType:      1,
-		Content:          []byte("Hello, world!"),
+		Content:          contentBytes,
 		Seq:              1,
 		ServerTime:       1625500000,
 		ClientTime:       1625500010,

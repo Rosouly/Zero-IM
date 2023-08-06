@@ -8,5 +8,6 @@ type Blacklist struct {
 }
 
 func (b *Blacklist) TableName() string {
-	return "blacklist_" + b.SelfId
+	//return "blacklist_" + b.SelfId
+	return "blacklist"
 }

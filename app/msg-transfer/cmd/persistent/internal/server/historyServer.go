@@ -35,6 +35,7 @@ func (s *MsgTransferPersistentServer) Start() {
 }
 
 func (s *MsgTransferPersistentServer) ChatMs2mysql(msg []byte, msgKey string) error {
+	logx.Info("ChatMs2mysql start")
 	msgFromMQ := chatpb.MsgDataToMQ{}
 	err := proto.Unmarshal(msg, &msgFromMQ)
 	if err != nil {
@@ -53,7 +54,9 @@ func (s *MsgTransferPersistentServer) ChatMs2mysql(msg []byte, msgKey string) er
 }
 
 func (s *MsgTransferPersistentServer) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
+	logx.Info("ConsumeClaim start")
 	for msg := range claim.Messages() {
+		logx.Infof("Received message: %v", string(msg.Value)) // 添加的打印语句
 		s.SetOnlineTopicStatus(OnlineTopicBusy)
 		err := s.msgHandle[msg.Topic](msg.Value, string(msg.Key))
 		if err != nil {
